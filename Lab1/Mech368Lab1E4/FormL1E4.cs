@@ -27,7 +27,7 @@ namespace Mech368Lab1E4
             if (this.LoadAvailableSerialPorts())
                 this.ConfigureSerialPort(comboBoxCOMPorts.SelectedItem.ToString());
 
-            serialConnectToggle.Click             += this.ToggleDatastream;
+            datastreamToggleButton.Click             += this.ToggleDatastream;
             comboBoxCOMPorts.SelectedIndexChanged += this.PortRebind;
             streamProcessingTimer.Tick            += this.ProcessDatastream;
             toggleButtonUpdateTimer.Tick          += this.UpdateSerialToggleButton;
@@ -67,6 +67,9 @@ namespace Mech368Lab1E4
 
         private void ToggleDatastream(object sender, EventArgs e)
         {
+            if (this.port is null)
+                return;
+
             if (this.port.IsOpen)
                 this.CloseDatastream();
             else
@@ -81,6 +84,9 @@ namespace Mech368Lab1E4
 
         private void ProcessDatastream(object sender, EventArgs e)
         {
+            if (this.port is null)
+                return;
+
             if (this.port.IsOpen)
                 textBoxBytesToRead.Text = this.port.BytesToRead.ToString();
 
@@ -105,7 +111,8 @@ namespace Mech368Lab1E4
 
             if (nPorts == 0)
             {
-                comboBoxCOMPorts.Text = "No COM ports detected!";
+                comboBoxCOMPorts.Items.Clear();
+                datastreamToggleButton.Text = "No COM ports detected!";
                 return false;
             }
             else
@@ -127,7 +134,10 @@ namespace Mech368Lab1E4
 
         private void UpdateSerialToggleButton(object sender, EventArgs e)
         {
-            serialConnectToggle.Text = 
+            if (this.port is null)
+                return;
+
+            datastreamToggleButton.Text = 
                 (this.port.IsOpen ? "Disconnect" : "Connect") + "Serial";
         }
     }

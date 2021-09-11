@@ -31,7 +31,7 @@ namespace Mech368Lab1E4
         {
             this.components = new System.ComponentModel.Container();
             this.comboBoxCOMPorts = new System.Windows.Forms.ComboBox();
-            this.serialConnectToggle = new System.Windows.Forms.Button();
+            this.datastreamToggleButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -52,14 +52,14 @@ namespace Mech368Lab1E4
             this.comboBoxCOMPorts.Size = new System.Drawing.Size(182, 33);
             this.comboBoxCOMPorts.TabIndex = 0;
             // 
-            // serialConnectToggle
+            // datastreamToggleButton
             // 
-            this.serialConnectToggle.Location = new System.Drawing.Point(218, 11);
-            this.serialConnectToggle.Name = "serialConnectToggle";
-            this.serialConnectToggle.Size = new System.Drawing.Size(206, 34);
-            this.serialConnectToggle.TabIndex = 1;
-            this.serialConnectToggle.Text = "N/A";
-            this.serialConnectToggle.UseVisualStyleBackColor = true;
+            this.datastreamToggleButton.Location = new System.Drawing.Point(218, 11);
+            this.datastreamToggleButton.Name = "datastreamToggleButton";
+            this.datastreamToggleButton.Size = new System.Drawing.Size(206, 34);
+            this.datastreamToggleButton.TabIndex = 1;
+            this.datastreamToggleButton.Text = "N/A";
+            this.datastreamToggleButton.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -90,6 +90,7 @@ namespace Mech368Lab1E4
             // 
             // textBoxBytesToRead
             // 
+            this.textBoxBytesToRead.Enabled = false;
             this.textBoxBytesToRead.Location = new System.Drawing.Point(218, 92);
             this.textBoxBytesToRead.Name = "textBoxBytesToRead";
             this.textBoxBytesToRead.Size = new System.Drawing.Size(166, 31);
@@ -97,6 +98,7 @@ namespace Mech368Lab1E4
             // 
             // textBoxBufferLength
             // 
+            this.textBoxBufferLength.Enabled = false;
             this.textBoxBufferLength.Location = new System.Drawing.Point(218, 132);
             this.textBoxBufferLength.Name = "textBoxBufferLength";
             this.textBoxBufferLength.Size = new System.Drawing.Size(166, 31);
@@ -104,6 +106,7 @@ namespace Mech368Lab1E4
             // 
             // textBox4
             // 
+            this.textBox4.Enabled = false;
             this.textBox4.Location = new System.Drawing.Point(218, 172);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(166, 31);
@@ -139,7 +142,7 @@ namespace Mech368Lab1E4
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.serialConnectToggle);
+            this.Controls.Add(this.datastreamToggleButton);
             this.Controls.Add(this.comboBoxCOMPorts);
             this.Name = "FormL1E4";
             this.Text = "Lab 1 Exercise 4";
@@ -152,7 +155,7 @@ namespace Mech368Lab1E4
         #endregion
 
         private System.Windows.Forms.ComboBox comboBoxCOMPorts;
-        private System.Windows.Forms.Button serialConnectToggle;
+        private System.Windows.Forms.Button datastreamToggleButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
