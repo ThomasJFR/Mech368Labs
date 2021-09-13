@@ -42,6 +42,12 @@ namespace Mech368Lab1E4
             this.label4 = new System.Windows.Forms.Label();
             this.streamProcessingTimer = new System.Windows.Forms.Timer(this.components);
             this.toggleButtonUpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBoxAx = new System.Windows.Forms.TextBox();
+            this.textBoxAy = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBoxAz = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // comboBoxCOMPorts
@@ -129,11 +135,68 @@ namespace Mech368Lab1E4
             this.label4.TabIndex = 2;
             this.label4.Text = "Datastream Output:";
             // 
-            // FormL1E4
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(16, 455);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(32, 25);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Ax";
+            // 
+            // textBoxAx
+            // 
+            this.textBoxAx.Enabled = false;
+            this.textBoxAx.Location = new System.Drawing.Point(55, 455);
+            this.textBoxAx.Name = "textBoxAx";
+            this.textBoxAx.Size = new System.Drawing.Size(82, 31);
+            this.textBoxAx.TabIndex = 5;
+            // 
+            // textBoxAy
+            // 
+            this.textBoxAy.Enabled = false;
+            this.textBoxAy.Location = new System.Drawing.Point(201, 455);
+            this.textBoxAy.Name = "textBoxAy";
+            this.textBoxAy.Size = new System.Drawing.Size(80, 31);
+            this.textBoxAy.TabIndex = 7;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(162, 455);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(33, 25);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "Ay";
+            // 
+            // textBoxAz
+            // 
+            this.textBoxAz.Enabled = false;
+            this.textBoxAz.Location = new System.Drawing.Point(347, 455);
+            this.textBoxAz.Name = "textBoxAz";
+            this.textBoxAz.Size = new System.Drawing.Size(77, 31);
+            this.textBoxAz.TabIndex = 9;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(308, 455);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(32, 25);
+            this.label7.TabIndex = 8;
+            this.label7.Text = "Az";
+            // 
+            // FormL1E5
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(440, 450);
+            this.ClientSize = new System.Drawing.Size(440, 495);
+            this.Controls.Add(this.textBoxAz);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.textBoxAy);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.textBoxAx);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.textBoxDatastreamOutput);
             this.Controls.Add(this.itemsInQueueTextbox);
             this.Controls.Add(this.textBoxBufferLength);
@@ -144,8 +207,8 @@ namespace Mech368Lab1E4
             this.Controls.Add(this.label1);
             this.Controls.Add(this.datastreamToggleButton);
             this.Controls.Add(this.comboBoxCOMPorts);
-            this.Name = "FormL1E4";
-            this.Text = "Lab 1 Exercise 4";
+            this.Name = "FormL1E5";
+            this.Text = "Lab 1 Exercise 5";
             this.Load += new System.EventHandler(this.FormL1E4_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -166,6 +229,12 @@ namespace Mech368Lab1E4
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Timer streamProcessingTimer;
         private System.Windows.Forms.Timer toggleButtonUpdateTimer;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBoxAx;
+        private System.Windows.Forms.TextBox textBoxAy;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBoxAz;
+        private System.Windows.Forms.Label label7;
     }
 }
 

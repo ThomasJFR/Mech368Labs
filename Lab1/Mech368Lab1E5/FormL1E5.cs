@@ -5,14 +5,20 @@ using System.Collections.Concurrent;
 
 namespace Mech368Lab1E4
 {
-
     public partial class FormL1E5 : Form
     {
         const string ACCELEROMETER_STREAM_REQUEST = "A";
+        enum AccelComponent
+        {
+            NotInitialized = -1,
+            Ax, Ay, Az
+        }
+        AccelComponent accelComponent = AccelComponent.NotInitialized;
 
         private SerialPort port;
         //private string streamBuffer;
         private ConcurrentQueue<Int32> dataQueue;
+        private TextBox[] accelComponentDisplays;
 
         public FormL1E5()
         {
@@ -20,6 +26,11 @@ namespace Mech368Lab1E4
 
             // this.streamBuffer = "";  // Empty stream buffer
             this.dataQueue = new ConcurrentQueue<Int32>();
+
+            // Capture acceleration display textboxes as an array for easy populating!
+            this.accelComponentDisplays = new TextBox[] {
+                textBoxAx, textBoxAy, textBoxAz
+            };
         }
 
         private void FormL1E4_Load(object _, EventArgs e)
@@ -111,8 +122,20 @@ namespace Mech368Lab1E4
             while (this.dataQueue.TryDequeue(out int next))
             {
                 if (next == 0xFF)
-                    textBoxDatastreamOutput.AppendText(Environment.NewLine);
-                textBoxDatastreamOutput.AppendText($"{next.ToString("X")}, ");
+                {
+                    this.accelComponent = AccelComponent.Ax;
+                    continue;
+                }
+
+                // Display the data we just received
+                textBoxDatastreamOutput.AppendText($"{next.ToString()}, ");
+
+                // Still haven't figured out what component this is
+                if (this.accelComponent == AccelComponent.NotInitialized)
+                    continue;
+
+                this.accelComponentDisplays[((int)this.accelComponent)].Text = next.ToString();
+                this.accelComponent++;
             }
 
             textBoxBufferLength.Text = textBoxDatastreamOutput.Text.Length.ToString();
