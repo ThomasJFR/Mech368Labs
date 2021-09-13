@@ -37,7 +37,7 @@ namespace Mech368Lab1E4
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxBytesToRead = new System.Windows.Forms.TextBox();
             this.textBoxBufferLength = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.itemsInQueueTextbox = new System.Windows.Forms.TextBox();
             this.textBoxDatastreamOutput = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.streamProcessingTimer = new System.Windows.Forms.Timer(this.components);
@@ -104,13 +104,13 @@ namespace Mech368Lab1E4
             this.textBoxBufferLength.Size = new System.Drawing.Size(166, 31);
             this.textBoxBufferLength.TabIndex = 3;
             // 
-            // textBox4
+            // itemsInQueueTextbox
             // 
-            this.textBox4.Enabled = false;
-            this.textBox4.Location = new System.Drawing.Point(218, 172);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(166, 31);
-            this.textBox4.TabIndex = 3;
+            this.itemsInQueueTextbox.Enabled = false;
+            this.itemsInQueueTextbox.Location = new System.Drawing.Point(218, 172);
+            this.itemsInQueueTextbox.Name = "itemsInQueueTextbox";
+            this.itemsInQueueTextbox.Size = new System.Drawing.Size(166, 31);
+            this.itemsInQueueTextbox.TabIndex = 3;
             // 
             // textBoxDatastreamOutput
             // 
@@ -135,7 +135,7 @@ namespace Mech368Lab1E4
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(440, 450);
             this.Controls.Add(this.textBoxDatastreamOutput);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.itemsInQueueTextbox);
             this.Controls.Add(this.textBoxBufferLength);
             this.Controls.Add(this.textBoxBytesToRead);
             this.Controls.Add(this.label4);
@@ -161,7 +161,7 @@ namespace Mech368Lab1E4
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBoxBytesToRead;
         private System.Windows.Forms.TextBox textBoxBufferLength;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox itemsInQueueTextbox;
         private System.Windows.Forms.TextBox textBoxDatastreamOutput;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Timer streamProcessingTimer;

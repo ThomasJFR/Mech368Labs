@@ -11,7 +11,7 @@ namespace Mech368Lab1E4
         const string ACCELEROMETER_STREAM_REQUEST = "A";
 
         private SerialPort port;
-        private string streamBuffer;
+        //private string streamBuffer;
         private ConcurrentQueue<Int32> dataQueue;
 
         public FormL1E4()
@@ -25,9 +25,13 @@ namespace Mech368Lab1E4
         private void FormL1E4_Load(object _, EventArgs e)
         {
             if (this.LoadAvailableSerialPorts())
-                this.ConfigureSerialPort(comboBoxCOMPorts.SelectedItem.ToString());
+            {
+                this.port = 
+                    this.ConfigureSerialPort(
+                        comboBoxCOMPorts.SelectedItem.ToString());
+            }
 
-            datastreamToggleButton.Click             += this.ToggleDatastream;
+            datastreamToggleButton.Click          += this.ToggleDatastream;
             comboBoxCOMPorts.SelectedIndexChanged += this.PortRebind;
             streamProcessingTimer.Tick            += this.ProcessDatastream;
             toggleButtonUpdateTimer.Tick          += this.UpdateSerialToggleButton;
@@ -43,7 +47,7 @@ namespace Mech368Lab1E4
                 PortName  = portname,
                 BaudRate  = 9600,
                 Parity    = Parity.None,
-                DataBits  = sizeof(byte),
+                DataBits  = 8,
                 StopBits  = StopBits.One,
                 Handshake = Handshake.None
             };
@@ -61,8 +65,11 @@ namespace Mech368Lab1E4
 
         private void CloseDatastream()
         {
-            this.port.Close();
-            this.port.Dispose();
+            if (this.port != null && this.port.IsOpen)
+            {
+                this.port.Close();
+                this.port.Dispose();
+            }
         }
 
         private void ToggleDatastream(object sender, EventArgs e)
@@ -98,10 +105,16 @@ namespace Mech368Lab1E4
             */
 
             // CONCURRENT-QUEUE BUFFER IMPLEMENTATION
-            textBoxBufferLength.Text = this.dataQueue.Count.ToString();
-            while (this.dataQueue.TryDequeue(out int next))
-                textBoxDatastreamOutput.AppendText(next.ToString("X"));
+            itemsInQueueTextbox.Text = this.dataQueue.Count.ToString();
 
+            while (this.dataQueue.TryDequeue(out int next))
+            {
+                if (next == 0xFF)
+                    textBoxDatastreamOutput.AppendText(Environment.NewLine);
+                textBoxDatastreamOutput.AppendText($"{next.ToString("X")}, ");
+            }
+
+            textBoxBufferLength.Text = textBoxDatastreamOutput.Text.Length.ToString();
         }
 
         private bool LoadAvailableSerialPorts()
@@ -127,9 +140,16 @@ namespace Mech368Lab1E4
         private void CaptureBytestream(object sender, EventArgs e)
         {
             int next;  // Byte buffer
-            while ((next = this.port.ReadByte()) != -1)
-                //this.streamBuffer += next.ToString("X") + ", ";  // String buffer implementation
-                this.dataQueue.Enqueue(next);  // ConcurrentQueue buffer implementation
+            try
+            {
+                while ((next = this.port.ReadByte()) != -1)
+                    //this.streamBuffer += next.ToString("X") + ", ";  // String buffer implementation
+                    this.dataQueue.Enqueue(next);  // ConcurrentQueue buffer implementation
+            }
+            catch (InvalidOperationException ioe)
+            {
+                // Serial disconnect while loop operating; this exception breaks out cleanly
+            }
         }
 
         private void UpdateSerialToggleButton(object sender, EventArgs e)
