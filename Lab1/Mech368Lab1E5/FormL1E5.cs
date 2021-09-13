@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 namespace Mech368Lab1E4
 {
 
-    public partial class FormL1E4 : Form
+    public partial class FormL1E5 : Form
     {
         const string ACCELEROMETER_STREAM_REQUEST = "A";
 
@@ -14,7 +14,7 @@ namespace Mech368Lab1E4
         //private string streamBuffer;
         private ConcurrentQueue<Int32> dataQueue;
 
-        public FormL1E4()
+        public FormL1E5()
         {
             InitializeComponent();
 
@@ -112,7 +112,7 @@ namespace Mech368Lab1E4
             {
                 if (next == 0xFF)
                     textBoxDatastreamOutput.AppendText(Environment.NewLine);
-                textBoxDatastreamOutput.AppendText($"{next.ToString()}, ");
+                textBoxDatastreamOutput.AppendText($"{next.ToString("X")}, ");
             }
 
             textBoxBufferLength.Text = textBoxDatastreamOutput.Text.Length.ToString();
