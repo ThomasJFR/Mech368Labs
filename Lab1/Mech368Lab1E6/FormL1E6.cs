@@ -19,9 +19,10 @@ namespace Mech368Lab1E4
         {
             Ax,
             Ay,
-            Az
+            Az,
+            Seeking
         }
-        AccelComponent accelComponent;
+        AccelComponent accelComponent = AccelComponent.Seeking;
 
         private SerialPort port;
         private ConcurrentQueue<Int32> dataQueue;
@@ -44,7 +45,7 @@ namespace Mech368Lab1E4
         {
             // Component Bindings
             datastreamToggleButton.Click          += this.ToggleDatastream;
-            comboBoxCOMPorts.SelectedIndexChanged += this.PortRebind;
+            comboBoxCOMPorts.SelectedIndexChanged += this.BindPort;
             buttonSelectFilename.Click            += this.ConfigureOutputStream;
             checkBoxSaveToFile.CheckedChanged     += this.ToggleOutputStream;
 
@@ -53,18 +54,23 @@ namespace Mech368Lab1E4
             toggleButtonUpdateTimer.Tick          += this.UpdateSerialToggleButton;
         }
 
-        private void FormL1E4_Load(object _, EventArgs e)
+        private void onFormLoad(object sender, EventArgs e)
         {
-            if (this.LoadAvailableSerialPorts())
-            {
-                this.port = 
-                    this.ConfigureSerialPort(
-                        comboBoxCOMPorts.SelectedItem.ToString());
-            }
+            // Populate the combo box
+            comboBoxCOMPorts.Items.Clear();
+            comboBoxCOMPorts.Items.AddRange(this.GetAvailableSerialPorts());
+            comboBoxCOMPorts.SelectedIndex = 0;
 
             // Enable the timers
             streamProcessingTimer.Enabled = true;
             toggleButtonUpdateTimer.Enabled = true;
+        }
+
+        private void onFormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.CloseDatastream();
+            if (this.streamWriter != null)
+                this.streamWriter.Close();
         }
 
         private SerialPort ConfigureSerialPort(string portname)
@@ -110,17 +116,24 @@ namespace Mech368Lab1E4
                 this.OpenDatastream();
         }
 
-        private void PortRebind(object sender, EventArgs e)
+        private void BindPort(object sender, EventArgs e)
         {
-            this.CloseDatastream();
-            this.ConfigureSerialPort(comboBoxCOMPorts.SelectedItem.ToString());
+            if (this.port != null && this.port.IsOpen)
+                this.CloseDatastream();
+
+            string portID = comboBoxCOMPorts.SelectedItem.ToString();
+            this.port = this.ConfigureSerialPort(portID);
         }
 
         private void CaptureDatastream(object sender, EventArgs e)
         {
             int next;  // Byte buffer
-            while ((next = this.port.ReadByte()) != -1)
-                this.dataQueue.Enqueue(next);  // ConcurrentQueue buffer implementation    
+            try
+            {
+                while ((next = this.port.ReadByte()) != -1)
+                    this.dataQueue.Enqueue(next);  // ConcurrentQueue buffer implementation    
+            }
+            catch { /*Ignored!*/ }
         }
 
         private void ProcessDatastream(object sender, EventArgs e)
@@ -136,7 +149,7 @@ namespace Mech368Lab1E4
             while (this.dataQueue.TryDequeue(out int next))
             {
                 // Display the data we just received
-                textBoxDatastreamOutput.AppendText($"{next.ToString()}, ");
+                textBoxDatastreamOutput.AppendText($"{next}, ");
 
                 // Process this datapoint
                 switch (this.accelComponent)
@@ -153,9 +166,9 @@ namespace Mech368Lab1E4
                     default:
                         if (next == (int) DSTokens.ACCEL_PACKET_HEADER)
                         {
-                            this.accelComponent = AccelComponent.Ax;
+                            this.accelComponent = AccelComponent.Ax;  // We expect this byte next
                             if (checkBoxSaveToFile.Checked)
-                                this.streamWriter.Write("\n" + DateTime.Now.ToString());
+                                this.streamWriter.Write("\n" + DateTime.Now.ToString("hh.mm.ss.ffffff"));
                         }
                         continue;
                 }
@@ -176,24 +189,21 @@ namespace Mech368Lab1E4
 
         private void ToggleOutputStream(object sender, EventArgs e)
         {
-            
             if ((sender as CheckBox).Checked)
                 this.streamWriter = new StreamWriter(textBoxFilename.Text);
             else if (this.streamWriter != null)
                 this.streamWriter.Close();
         }
 
-        private bool LoadAvailableSerialPorts()
+        private string[] GetAvailableSerialPorts()
         {
             string[] ports = System.IO.Ports.SerialPort.GetPortNames();
             int nPorts = ports.Length;
+            return ports;
 
+            /*
             if (nPorts == 0)
-            {
-                comboBoxCOMPorts.Items.Clear();
                 datastreamToggleButton.Text = "No COM ports detected!";
-                return false;
-            }
             else
             {
                 comboBoxCOMPorts.Items.Clear();
@@ -201,9 +211,10 @@ namespace Mech368Lab1E4
                 comboBoxCOMPorts.SelectedIndex = 0;
                 return true;
             }
+            */
         }
 
-        
+
 
         private void UpdateSerialToggleButton(object sender, EventArgs e)
         {

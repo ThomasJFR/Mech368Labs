@@ -243,7 +243,8 @@ namespace Mech368Lab1E4
             this.Controls.Add(this.comboBoxCOMPorts);
             this.Name = "FormL1E6";
             this.Text = "Lab 1 Exercise 6";
-            this.Load += new System.EventHandler(this.FormL1E4_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.onFormClosing);
+            this.Load += new System.EventHandler(this.onFormLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
 
