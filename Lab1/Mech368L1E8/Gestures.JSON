@@ -1,0 +1,30 @@
+  [
+    {
+      "id": "Punch",
+      "key": [ -4, 0, 0 ],
+      "duration": 5,
+      "sprite": [ 150, 0, 70, 95 ],
+      "branches": [
+        {
+          "id": "Uppercut",
+          "key": [ -1, 2, 0 ],
+          "duration": 10,
+          "sprite": [ 300, 280, 50, 115 ]
+        }
+      ]
+    },
+
+    {
+      "id": "High Punch",
+      "key": [ -3, 2, 0 ],
+      "duration": 7,
+      "sprite": [ 180, 220, 40, 70 ]
+    },
+
+    {
+      "id": "Flip",
+      "key": [ 2, 3, 0 ],
+      "duration": 10,
+      "sprite": [ 120, 490, 50, 70 ]
+    }
+  ]

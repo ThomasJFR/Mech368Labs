@@ -1,0 +1,39 @@
+{
+  
+  "id": "Standing",
+  "key": [ 0, 0, 0 ],
+  "duration":  -1,
+  "branches": [
+    {
+      "id": "Punch",
+      "key": [ 1, 0, 0 ],
+      "duration": 5,
+      "branches": [
+        {
+          "id": "Uppercut",
+          "key": [ 0, 1, 0 ],
+          "duration": 10
+        }
+      ]
+    },
+
+    {
+      "id": "High Punch",
+      "key": [ 1, 1, 0 ],
+      "duration": 5
+    },
+
+    {
+      "id": "Sky Punch",
+      "key": [ 0, 1, 0 ],
+      "duration": 5,
+      "branches": [
+        {
+          "id": "Head Smash",
+          "key": [ 1, -1, 0 ],
+          "duration": 10
+        }
+      ]
+    }
+  ]
+}
