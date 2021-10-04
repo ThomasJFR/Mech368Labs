@@ -1,9 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Gestures;
 using AccelerometerIO;
 
@@ -15,6 +15,8 @@ namespace Mech368L1E8
         private GestureHandler gestureHandler;
         private Accelerometer accelerometer;
         private Bitmap spritesheet;
+
+        private StreamWriter streamWriter;
 
         public FormL1E8()
         {
@@ -41,10 +43,15 @@ namespace Mech368L1E8
         private void onFormClosing(object sender, FormClosingEventArgs e)
         {
             this.accelerometer.CloseStream();
+            if (this.streamWriter != null)
+                this.streamWriter.Close();
         }
 
         private void InitializeListeners()
         {
+            this.savefileCheckbox.CheckedChanged += this.ToggleFilewriter;
+            this.savefileBox.Click += this.ConfigureOutputStream;
+
             this.actionTicker.Tick += this.ActionUpdateTick;
             this.spriteTicker.Tick += this.SpriteUpdateTick;
 
@@ -52,6 +59,26 @@ namespace Mech368L1E8
 
         }
 
+        private void ConfigureOutputStream(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            if (sfd.ShowDialog() == DialogResult.OK)
+                savefileBox.Text = sfd.FileName;
+        }
+
+        private void ToggleFilewriter(object sender, EventArgs e)
+        {
+            if (this.streamWriter == null)
+                if (this.savefileBox.Text.Length > 0)
+                    this.streamWriter = new StreamWriter(this.savefileBox.Text);
+                else
+                    MessageBox.Show("Invalid filename!");
+            else
+            {
+                this.streamWriter.Close();
+                this.streamWriter = null;
+            }
+        }
 
         private int gestureTimer = 0;
         private  Queue<int> axQueue = new Queue<int>();
@@ -141,6 +168,9 @@ namespace Mech368L1E8
                         this.action = g;
                     }
                 }
+
+                if (this.streamWriter != null)
+                    this.streamWriter.WriteLine($"{ax}, {ay}, {az}, {this.action.id}");
             }
             if (this.gestureTimer > 0)
                 this.gestureTimer--;

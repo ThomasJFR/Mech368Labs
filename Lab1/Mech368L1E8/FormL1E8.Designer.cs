@@ -39,6 +39,8 @@ namespace Mech368L1E8
             this.ayBox = new System.Windows.Forms.TextBox();
             this.azBox = new System.Windows.Forms.TextBox();
             this.console = new System.Windows.Forms.TextBox();
+            this.savefileCheckbox = new System.Windows.Forms.CheckBox();
+            this.savefileBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.spriteDisplay)).BeginInit();
             this.SuspendLayout();
             // 
@@ -93,15 +95,34 @@ namespace Mech368L1E8
             this.console.Location = new System.Drawing.Point(578, 21);
             this.console.Multiline = true;
             this.console.Name = "console";
-            this.console.Size = new System.Drawing.Size(385, 414);
+            this.console.Size = new System.Drawing.Size(385, 310);
             this.console.TabIndex = 3;
+            // 
+            // savefileCheckbox
+            // 
+            this.savefileCheckbox.AutoSize = true;
+            this.savefileCheckbox.Location = new System.Drawing.Point(578, 369);
+            this.savefileCheckbox.Name = "savefileCheckbox";
+            this.savefileCheckbox.Size = new System.Drawing.Size(128, 29);
+            this.savefileCheckbox.TabIndex = 4;
+            this.savefileCheckbox.Text = "Save to File";
+            this.savefileCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // savefileBox
+            // 
+            this.savefileBox.Location = new System.Drawing.Point(578, 404);
+            this.savefileBox.Name = "savefileBox";
+            this.savefileBox.Size = new System.Drawing.Size(385, 31);
+            this.savefileBox.TabIndex = 2;
             // 
             // FormL1E8
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(992, 450);
+            this.Controls.Add(this.savefileCheckbox);
             this.Controls.Add(this.console);
+            this.Controls.Add(this.savefileBox);
             this.Controls.Add(this.azBox);
             this.Controls.Add(this.ayBox);
             this.Controls.Add(this.axBox);
@@ -127,6 +148,8 @@ namespace Mech368L1E8
         private System.Windows.Forms.TextBox ayBox;
         private System.Windows.Forms.TextBox azBox;
         private System.Windows.Forms.TextBox console;
+        private System.Windows.Forms.CheckBox savefileCheckbox;
+        private System.Windows.Forms.TextBox savefileBox;
     }
 }
 
