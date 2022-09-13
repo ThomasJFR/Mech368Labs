@@ -27,9 +27,9 @@ namespace AccelerometerIO
         }
         DSDataTracker tracker;
 
-        private SerialPort port;
+        public SerialPort port;
         private Func<int[]> callback;
-        private ConcurrentQueue<byte> streamBuffer;
+        public ConcurrentQueue<byte> streamBuffer;
 
         public Accelerometer(string comID)
         {

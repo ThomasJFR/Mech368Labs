@@ -1,30 +1,30 @@
-  [
-    {
-      "id": "Punch",
-      "key": [ -4, 0, 0 ],
-      "duration": 5,
-      "sprite": [ 150, 0, 70, 95 ],
-      "branches": [
-        {
-          "id": "Uppercut",
-          "key": [ -1, 2, 0 ],
-          "duration": 10,
-          "sprite": [ 300, 280, 50, 115 ]
-        } 
-      ]
-    },
+[
+  {
+    "id": "Go West",
+    "key": [ 0, 3, 0 ],
+    "duration": 10,
+    "sprite": [ 0, 0, 50, 50 ]
+  },
 
-    {
-      "id": "High Punch",
-      "key": [ -3, 2, 0 ],
-      "duration": 7,
-      "sprite": [ 180, 220, 40, 70 ]
-    },
+  {
+    "id": "Frisbee Throw",
+    "key": [ 1, 1, 0 ],
+    "duration": 10,
+    "sprite": [ 150, 0, 70, 95 ]
+  },
 
-    {
-      "id": "Flip",
-      "key": [ 2, 3, 0 ],
-      "duration": 10,
-      "sprite": [ 120, 490, 50, 70 ]
-    }
-  ]
+  {
+    "id": "Raise Hand",
+    "key": [ 0, 2, 2 ],
+    "duration": 5,
+    "sprite": [ 0, 0, 2, 2 ],
+    "branches": [
+      {
+        "id": "Wave",
+        "key": [ 0, -1, 0 ],
+        "duration": 10,
+        "sprite": [ 300, 280, 50, 115 ]
+      }
+    ]
+  }
+]

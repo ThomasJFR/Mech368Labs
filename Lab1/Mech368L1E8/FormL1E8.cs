@@ -81,11 +81,32 @@ namespace Mech368L1E8
         }
 
         private int gestureTimer = 0;
-        private  Queue<int> axQueue = new Queue<int>();
+        private Queue<int> axQueue = new Queue<int>();
         private Queue<int> ayQueue = new Queue<int>();
         private Queue<int> azQueue = new Queue<int>();
+        private const int axQueue_size = 4,
+                          ayQueue_size = 4,
+                          azQueue_size = 4;
+
+        private Queue<int> axQueue2 = new Queue<int>();
+        private Queue<int> ayQueue2 = new Queue<int>();
+        private Queue<int> azQueue2 = new Queue<int>();
+        private const int axQueue2_size = 50,
+                          ayQueue2_size = 50,
+                          azQueue2_size = 50;
+
+        private Queue<float> gxMaxQueue = new Queue<float>();
+        private Queue<float> gyMaxQueue = new Queue<float>();
+        private Queue<float> gzMaxQueue = new Queue<float>();
+        private const int gxMaxQueue_size = 500,
+                          gyMaxQueue_size = 500,
+                          gzMaxQueue_size = 500;
+
         private void ActionUpdateTick(object sender, EventArgs e)
         {
+            this.serBufLenBox.Text = $"{this.accelerometer.port.BytesToWrite}";
+            this.queueLenBox.Text = $"{this.accelerometer.streamBuffer.Count}";
+            
             List<Acceleration> accelerations = this.accelerometer.ParseDatastream();
             if (accelerations.Count == 0 && this.accelerometer.IsOPen())
             {
@@ -93,44 +114,12 @@ namespace Mech368L1E8
                 MessageBox.Show("COMPort Disconnected!");
                 return;
             }
-            /*            while (accelerations.Count > 3)
-                            accelerations.RemoveAt(0);
-
-                        int ax = 0, ay = 0, az = 0;
-                        foreach (Acceleration acceleration in accelerations)
-                        {
-                            ax += (int)((acceleration.ax - 126));
-                            ay += (int)((acceleration.ay - 100));
-                            az += (int)((acceleration.az - 126));
-                        }
-
-                        ax /= 20 * 3;
-                        ay /= 40 * 3;
-                        az /= 40 * 3;
-            
-                    if (this.gestureHandler.Interpret(new int[] { ax, ay, az }, out Gesture g))
-                    {
-                        if (this.action.id != g.id)
-                        {
-                            this.gestureTimer = g.duration;
-                            this.action = g;
-                        }
-                        else
-                        {
-                            if (this.gestureTimer > 0)
-                                this.gestureTimer--;
-                            else
-                                this.action = Gesture.IDLE;
-                        }
-                    }
-                    else if (this.gestureTimer > 0)
-                        this.gestureTimer--;
-                    else
-                        this.action = Gesture.IDLE;
-                }*/
             
             foreach (Acceleration acceleration in accelerations)
             {
+                this.axiBox.Text = $"{acceleration.ax}"; 
+                this.ayiBox.Text = $"{acceleration.ay}"; 
+                this.aziBox.Text = $"{acceleration.az}";
                 void EnqueueCircular(Queue<int> queue, int next, int max)
                 {
                     queue.Enqueue(next);
@@ -138,25 +127,67 @@ namespace Mech368L1E8
                         queue.Dequeue();
                 }
 
-                EnqueueCircular(this.axQueue, acceleration.ax - 126, 4);
-                EnqueueCircular(this.ayQueue, acceleration.ay - 100, 4);
-                EnqueueCircular(this.azQueue, acceleration.az - 126, 4);
+                void EnqueueCircularf(Queue<float> queue, float next, int max)
+                {
+                    queue.Enqueue(next);
+                    if (queue.Count > max)
+                        queue.Dequeue();
+                }
 
-                int AverageAndDiscretize(Queue<int> queue, int disc_base)
+                EnqueueCircular(this.axQueue, acceleration.ax, axQueue_size);
+                EnqueueCircular(this.ayQueue, acceleration.ay, ayQueue_size);
+                EnqueueCircular(this.azQueue, acceleration.az, azQueue_size);
+
+                EnqueueCircular(this.axQueue2, acceleration.ax, axQueue2_size);
+                EnqueueCircular(this.ayQueue2, acceleration.ay, ayQueue2_size);
+                EnqueueCircular(this.azQueue2, acceleration.az, azQueue2_size);
+
+                float GetQueueMax(Queue<float> queue)
+                {
+                    float max = 0;
+                    foreach (float val in queue)
+                        max = MathF.Abs(val) > MathF.Abs(max) ? val : max;
+                    return max;
+                }
+
+                int AverageAndDiscretize(Queue<int> queue, int disc_base, int offset = 0)
                 {
                     float avg = 0;
                     foreach (int val in queue)
-                        avg += val;
+                        avg += val - offset;
                     avg /= (float) queue.Count;
 
                     float acc = avg / (1f * disc_base);
                     return (int) (acc > 0 ? Math.Floor(acc) : Math.Ceiling(acc));
                 }
 
+                // Display some stuff
+                float gx = (AverageAndDiscretize(this.axQueue2, 1, 128)) / 20f;
+                float gy = (AverageAndDiscretize(this.ayQueue2, 1, 128)) / 20f;
+                float gz = (AverageAndDiscretize(this.azQueue2, 1, 128)) / 20f;
+
+                this.axBox.Text = $"{gx}";
+                this.ayBox.Text = $"{gy}";
+                this.azBox.Text = $"{gz}";
+
+                this.oriXBox.Text = gx > 0 ? "+X" : (gx < 0 ? "-X" : "");
+                this.oriYBox.Text = gy > 0 ? "+Y" : (gy < 0 ? "-Y" : "");
+                this.oriZBox.Text = gz > 0 ? "+Z" : (gz < 0 ? "-Z" : "");
+
+                EnqueueCircularf(this.gxMaxQueue, (acceleration.ax - 128) / 20f, gxMaxQueue_size);
+                EnqueueCircularf(this.gyMaxQueue, (acceleration.ay - 128) / 20f, gyMaxQueue_size);
+                EnqueueCircularf(this.gzMaxQueue, (acceleration.az - 128) / 20f, gzMaxQueue_size);
+                float xMax = GetQueueMax(this.gxMaxQueue);
+                float yMax = GetQueueMax(this.gyMaxQueue);
+                float zMax = GetQueueMax(this.gzMaxQueue);
+                this.gx500Box.Text = $"{xMax}";
+                this.gy500Box.Text = $"{yMax}";
+                this.gz500Box.Text = $"{zMax}";
+
                 // Tune the disc_base as needed
-                int ax = AverageAndDiscretize(this.axQueue, 20);
-                int ay = AverageAndDiscretize(this.ayQueue, 35);
-                int az = AverageAndDiscretize(this.azQueue, 40);
+                int ax = AverageAndDiscretize(this.axQueue, 20, 128);
+                int ay = AverageAndDiscretize(this.ayQueue, 35, 100);
+                int az = AverageAndDiscretize(this.azQueue, 40, 128);
 
                 this.console.AppendText($"{ax}, {ay}, {az}" + Environment.NewLine);
 
@@ -170,7 +201,7 @@ namespace Mech368L1E8
                 }
 
                 if (this.streamWriter != null)
-                    this.streamWriter.WriteLine($"{ax}, {ay}, {az}, {this.action.id}");
+                    this.streamWriter.WriteLine($"{acceleration.ax}, {acceleration.ay}, {acceleration.az}, {this.action.id}");
             }
             if (this.gestureTimer > 0)
                 this.gestureTimer--;
